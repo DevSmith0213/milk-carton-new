@@ -218,6 +218,9 @@ export function Interface({ zone, updateZone, isChangingZone }) {
             muted
             loop
             autoPlay
+            onLoadedData={(e) => {
+              e.target.currentTime = 0;
+            }}
           ></video>
         </div>
       </div>
