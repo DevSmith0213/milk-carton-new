@@ -1,0 +1,298 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+  background: "#171717";
+  overflow: hidden;
+}
+html {
+  scroll-behavior: smooth;
+}
+/* 
+canvas {
+   width: 100vw !important;
+   height: 100vh !important;
+} */
+::-webkit-scrollbar {
+  display: none;
+}
+video {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 100;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.scroll-image {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.my-canvas {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+.images-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.menu-btn {
+  position: absolute;
+  right: 35px;
+  top: 20px;
+  font-size: 45px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: 0.4s ease;
+}
+
+.menu-btn:hover {
+  color: #fbad18;
+}
+
+.milkbox-points-container {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translate(0%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.milkbox-points-container p {
+  text-transform: uppercase;
+  display: none;
+}
+
+.milkbox-points-container :hover p {
+  display: block;
+}
+
+.milkbox-points-container img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/* .a{} */
+
+@media screen and (max-width: 700px) {
+  .milkbox-points-container div {
+    height: 39px;
+    flex-direction: column-reverse;
+    width: 70px !important;
+  }
+  .milkbox-points-container p {
+    font-size: 9px;
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .milkbox-points-container div {
+    height: 39px;
+    flex-direction: column-reverse;
+    width: 27px !important;
+  }
+  .milkbox-points-container p {
+    font-size: 6px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .milkbox-points-container div {
+    /* width: 40px !important; */
+    height: 30px;
+  }
+  .milkbox-points-container p {
+    font-size: 7px;
+  }
+  .milkbox-points-container img {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.scroll-down-img {
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+  width: 100px;
+  height: 80px;
+  object-fit: contain;
+  z-index: 1000;
+}
+
+.menu-overlay {
+  position: fixed;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(223, 223, 223, 1);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10005;
+}
+
+.close-btn {
+  position: absolute;
+  top: -70px;
+  right: 5px;
+  color: rgb(39, 39, 39);
+  font-size: 32px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+nav {
+  position: relative;
+  text-align: left;
+}
+nav a {
+  display: block;
+  color: rgb(58, 58, 58);
+  text-decoration: none;
+  font-size: 52px;
+  font-weight: 800;
+  width: 530px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  transition: color 0.3s ease;
+}
+nav a:hover {
+  color: #fbad18;
+}
+.icon {
+  display: inline-block;
+  width: 42px;
+  height: 42px;
+  margin-left: 50px;
+  object-fit: contain;
+  opacity: 1;
+  transition: all 0.4s ease;
+}
+
+.milkbox-points-container div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 160px;
+}
+
+.active-menu {
+  color: #fbad18; /* Highlight color */
+}
+
+.active-menu img {
+  color: #fbad18;
+}
+
+.active-menu a {
+}
+
+.custom_div {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom_div .c_circle {
+  width: 160px;
+  height: 160px;
+  z-index: 9999;
+  border-radius: 100%;
+  border: 25px solid #dfdfdf;
+  position: absolute;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  opacity: 1 !important;
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.menu-item:hover {
+  color: #fbad18; /* Highlight text on hover */
+}
+
+.menu-item:hover .icon {
+  content: url("../public/milkbox-logo-hovered.png"); /* Change the icon on hover */
+}
+
+.active-menu {
+  color: #fbad18; /* Highlight active menu text */
+}
+
+.active-menu .icon {
+  content: url("../public/milkbox-logo-hovered.png"); /* Active menu icon */
+}
+
+@media (max-width: 600px) {
+  nav a {
+    display: block;
+    color: rgb(58, 58, 58);
+    text-decoration: none;
+    font-size: 28px;
+    font-weight: 800;
+    width: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+  }
+
+  .milkbox-points-container {
+    right: 10px;
+  }
+
+  .menu-btn {
+    right: 15px;
+  }
+
+  .scroll-down-img {
+    right: 0px;
+    width: 70px;
+    height: 70px;
+  }
+}
+
+.disable-link {
+  opacity: 0.7;
+  pointer-events: none;
+  cursor: not-allowed;
+}
