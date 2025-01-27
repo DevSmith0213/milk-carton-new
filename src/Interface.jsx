@@ -13,6 +13,7 @@ export function Interface({ zone, updateZone, isChangingZone }) {
   const ref = useRef();
   const navRef = useRef();
   const fadeOverlayRef = useRef(); // Reference for side menu fade overlay
+  const videoRef = useRef();
 
   function Open() {
     gsap.set(navRef.current, { opacity: 1 });
@@ -86,86 +87,11 @@ export function Interface({ zone, updateZone, isChangingZone }) {
     // console.log("setDefrotation:", setDefrotation);
 
     OpenFadeOverlay(); // Open fade overlay
-
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+    }
     Close();
-
-    // switch (value) {
-    //   case 1:
-    //     document.querySelectorAll("div").forEach((el, i) => {
-    //       const mysheetPosition = 1.12; // This is the current position
-
-    //       // Calculate scroll offset
-    //       const scrollOffset = (mysheetPosition - 1.4) / 22.5;
-
-    //       // Calculate scrollTop
-    //       const scrollableElement = el;
-    //       const scrollableHeight =
-    //         scrollableElement.scrollHeight - scrollableElement.clientHeight;
-    //       const scrollTop = scrollOffset * scrollableHeight;
-
-    //       el.scrollTop = scrollTop;
-    //     });
-    //     setDefrotation([0, 0, 0]); // Example rotation for section 1
-
-    //     break;
-
-    //   case 2:
-    //     document.querySelectorAll("div").forEach((el, i) => {
-    //       const mysheetPosition = 7; // This is the current position
-
-    //       // Calculate scroll offset
-    //       const scrollOffset = (mysheetPosition - 1.4) / 22.5;
-
-    //       // Calculate scrollTop
-    //       const scrollableElement = el;
-    //       const scrollableHeight =
-    //         scrollableElement.scrollHeight - scrollableElement.clientHeight;
-    //       const scrollTop = scrollOffset * scrollableHeight;
-
-    //       el.scrollTop = scrollTop;
-    //     });
-
-    //     setDefrotation([0, 6.3, 0]); // Example for section 2
-    //     break;
-
-    //   case 3:
-    //     document.querySelectorAll("div").forEach((el, i) => {
-    //       const mysheetPosition = 10; // This is the current position
-
-    //       // Calculate scroll offset
-    //       const scrollOffset = (mysheetPosition - 1.4) / 22.5;
-
-    //       // Calculate scrollTop
-    //       const scrollableElement = el;
-    //       const scrollableHeight =
-    //         scrollableElement.scrollHeight - scrollableElement.clientHeight;
-    //       const scrollTop = scrollOffset * scrollableHeight;
-
-    //       el.scrollTop = scrollTop;
-    //     });
-    //     setDefrotation([0, 6.3, 0]); // Section 3
-    //     break;
-
-    //   case 4:
-    //     document.querySelectorAll("div").forEach((el, i) => {
-    //       const mysheetPosition = 12.82; // This is the current position
-
-    //       // Calculate scroll offset
-    //       const scrollOffset = (mysheetPosition - 1.4) / 22.5;
-
-    //       // Calculate scrollTop
-    //       const scrollableElement = el;
-    //       const scrollableHeight =
-    //         scrollableElement.scrollHeight - scrollableElement.clientHeight;
-    //       const scrollTop = scrollOffset * scrollableHeight;
-
-    //       el.scrollTop = scrollTop;
-    //     });
-
-    //     setDefrotation([0, 6.3, 0]); // Section 4
-    //     break;
-    // }
-
     updateZone(value, true);
 
     // Close fade overlay after animations
@@ -205,6 +131,7 @@ export function Interface({ zone, updateZone, isChangingZone }) {
         <div className="custom_div">
           <div className="c_circle"></div>
           <video
+            ref={videoRef}
             style={{
               opacity: "1",
               position: "relative",
