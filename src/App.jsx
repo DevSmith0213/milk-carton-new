@@ -42,7 +42,7 @@ useGLTF.preload("export.glb");
 
 export default function App() {
   const { progress } = useProgress();
-  
+
   const sheet = useMemo(
     () =>
       getProject("Fly Through", {
@@ -56,7 +56,7 @@ export default function App() {
     [sheet]
   );
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
-  const [maxspeed, setmaxspeed] =  useState(0.08);
+  const [maxspeed, setmaxspeed] = useState(0.08);
   const [defrotation, setDefrotation] = useState([0, 0, 0]);
   const [activeMenu, setActiveMenu] = useState(1); // State to track the active menu
   const isManualSelectionRef = useRef(false); // To track manual selection
@@ -75,11 +75,11 @@ export default function App() {
       .forEach((el, i) => {
         el.addEventListener("click", () => {
           setmaxspeed(10);
-          console.log(`after click  : ${maxspeed}`)
+          console.log(`after click  : ${maxspeed}`);
 
           setTimeout(() => {
             setmaxspeed(0.08);
-            console.log(`after time out : ${maxspeed}`)
+            console.log(`after time out : ${maxspeed}`);
           }, 3000);
         });
       });
@@ -118,7 +118,7 @@ export default function App() {
         setDefrotation={setDefrotation}
       />
       <Lastvideo newsheet={myObject} />
-       <CanvasContainer
+      <CanvasContainer
         sheet={sheet}
         maxspeed={maxspeed}
         initialLoadComplete={initialLoadComplete}
@@ -152,9 +152,8 @@ const CanvasContainer = memo(
         <ScrollControls
           maxSpeed={maxspeed}
           pages={15}
-          damping={0.12
-          }
-            htmlStyle={{ display: "none" }} // Hide scrollbar
+          damping={0.12}
+          htmlStyle={{ display: "none" }} // Hide scrollbar
           enabled={initialLoadComplete}
         >
           <SheetProvider sheet={sheet}>
@@ -236,8 +235,7 @@ function Scene({
     scene.background = texture;
     materials["arrow-material"].color = new THREE.Color("black");
     materials["video-texture"].map = mainVideo;
-  
-    
+
     // Optimize material settings
     Object.values(materials).forEach((material) => {
       if (material.map) {
@@ -327,13 +325,17 @@ function Scene({
   });
 
   const handleMouseOver = (e) => {
-    document.body.style.cursor = "pointer";
-    animateScale(e.object, 0.073);
+    if (sheet.sequence.position > 11.8) {
+      document.body.style.cursor = "pointer";
+      animateScale(e.object, 0.073);
+    }
   };
 
   const handleMouseLeave = (e) => {
-    document.body.style.cursor = "default";
-    animateScale(e.object, 0.066);
+    if (sheet.sequence.position > 11.8) {
+      document.body.style.cursor = "default";
+      animateScale(e.object, 0.066);
+    }
   };
 
   const animateScale = (object, scale) => {
@@ -366,22 +368,32 @@ function Scene({
             onPointerOver={handleMouseOver}
             onPointerLeave={handleMouseLeave}
             onClick={() =>
-              window.open("https://www.linkedin.com/company/calcium-company/")
+              sheet.sequence.position > 11.8
+                ? window.open(
+                    "https://www.linkedin.com/company/calcium-company/"
+                  )
+                : console.log("click")
             }
           />
           <primitive
             object={nodes.insta}
             onPointerOver={handleMouseOver}
             onPointerLeave={handleMouseLeave}
-            // onClick={() =>
-            //   window.open("https://www.instagram.com/calciumandcompany/")
-            // }
+            onClick={() =>
+              sheet.sequence.position > 11.8
+                ? window.open("https://www.instagram.com/calciumandcompany/")
+                : console.log("click")
+            }
           />
           <primitive
             object={nodes.work}
             onPointerOver={handleMouseOver}
             onPointerLeave={handleMouseLeave}
-            // onClick={() => window.open("https://calciumco.com/careers/")}
+            onClick={() =>
+              sheet.sequence.position > 11.8
+                ? window.open("https://calciumco.com/careers/")
+                : console.log("click")
+            }
           />
 
           <editable.group theatreKey="Cap">
@@ -453,28 +465,28 @@ function updateMilkboxLogoStates(position) {
   else if (position < 22) setLogoState([0, 1, 2, 3]);
 }
 
-  function updateActiveMenu(position, setActiveMenu, isManualSelectionRef) {
-    if (isManualSelectionRef.current) return; // Skip updating if a menu item was clicked
+function updateActiveMenu(position, setActiveMenu, isManualSelectionRef) {
+  if (isManualSelectionRef.current) return; // Skip updating if a menu item was clicked
 
-    switch (true) {
-      case position < 5.8:
-        setActiveMenu(1);
-        break;
+  switch (true) {
+    case position < 5.8:
+      setActiveMenu(1);
+      break;
 
-      case position >= 5.8 && position < 9.75:
-        setActiveMenu(2);
-        break;
+    case position >= 5.8 && position < 9.75:
+      setActiveMenu(2);
+      break;
 
-      case position >= 9.75 && position < 12.22:
-        setActiveMenu(3);
-        break;
+    case position >= 9.75 && position < 12.22:
+      setActiveMenu(3);
+      break;
 
-      case position >= 12.22:
-        setActiveMenu(4);
-        break;
+    case position >= 12.22:
+      setActiveMenu(4);
+      break;
 
-      default:
-        setActiveMenu(null); // Optional: Reset or handle unexpected positions
-        break;
-    }
+    default:
+      setActiveMenu(null); // Optional: Reset or handle unexpected positions
+      break;
   }
+}
