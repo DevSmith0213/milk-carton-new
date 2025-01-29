@@ -19,6 +19,27 @@ canvas {
 ::-webkit-scrollbar {
   display: none;
 }
+
+.btm-scroll {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+  z-index: 1000;
+}
+
+.btm-scroll h1 {
+  font-size: 18px;
+}
+
+.scroll-down-img {
+  margin-top: 10px;
+  width: 50px;
+  object-fit: contain;
+}
+
 video {
   width: 100vw;
   height: 100vh;
@@ -138,16 +159,6 @@ video {
   }
 }
 
-.scroll-down-img {
-  position: absolute;
-  bottom: 20px;
-  right: 10px;
-  width: 100px;
-  height: 80px;
-  object-fit: contain;
-  z-index: 1000;
-}
-
 .menu-overlay {
   position: fixed;
   opacity: 0;
@@ -241,7 +252,6 @@ nav a:hover {
 .menu-item {
   display: flex;
   align-items: center;
-  opacity: 1 !important;
   transition: color 0.3s ease; /* Smooth color transition */
 }
 
@@ -283,16 +293,13 @@ nav a:hover {
   .menu-btn {
     right: 15px;
   }
-
+  .btm-scroll {
+    right: 0px;
+  }
+  /* 
   .scroll-down-img {
     right: 0px;
     width: 70px;
     height: 70px;
-  }
-}
-
-.disable-link {
-  opacity: 0.7;
-  pointer-events: none;
-  cursor: not-allowed;
+  } */
 }

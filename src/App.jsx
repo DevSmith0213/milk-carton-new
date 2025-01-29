@@ -35,8 +35,6 @@ import * as THREE from "three";
 import gsap from "gsap";
 import { Interface } from "./Interface";
 import { Lastvideo } from "./Lastvideo";
-import usePrevious from "./hooks/usePrevious";
-import useUpdateEffect from "./hooks/useUpdateEffect";
 
 // Preload 3D model
 
@@ -44,7 +42,7 @@ useGLTF.preload("export.glb");
 
 export default function App() {
   const { progress } = useProgress();
-
+  
   const sheet = useMemo(
     () =>
       getProject("Fly Through", {
@@ -58,22 +56,30 @@ export default function App() {
     [sheet]
   );
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
-  const [maxspeed, setmaxspeed] = useState(0.08);
+  const [maxspeed, setmaxspeed] =  useState(0.08);
   const [defrotation, setDefrotation] = useState([0, 0, 0]);
-  const [zone, setZone] = useState(0);
+  const [activeMenu, setActiveMenu] = useState(1); // State to track the active menu
   const isManualSelectionRef = useRef(false); // To track manual selection
+  const handleMenuClick = (menuNumber) => {
+    isManualSelectionRef.current = true; // Mark as manual selection
+    setActiveMenu(menuNumber);
 
+    // Reset the flag after a delay to allow scrolling updates again
+    setTimeout(() => {
+      isManualSelectionRef.current = false;
+    }, 1000);
+  };
   useEffect(() => {
     document
       .querySelectorAll(".milkbox-points-container img")
       .forEach((el, i) => {
         el.addEventListener("click", () => {
           setmaxspeed(10);
-          console.log(`after click  : ${maxspeed}`);
+          console.log(`after click  : ${maxspeed}`)
 
           setTimeout(() => {
             setmaxspeed(0.08);
-            console.log(`after time out : ${maxspeed}`);
+            console.log(`after time out : ${maxspeed}`)
           }, 3000);
         });
       });
@@ -90,38 +96,11 @@ export default function App() {
   }, []);
   // console.log(defrotation)
 
-  const previousZone = usePrevious(zone) || 0;
-
-  const isChangingZone = useRef(false);
-  const isInstantRef = useRef(false);
-  const lastTouchY = useRef(0);
-
-  const landingZones = [
-    { position: 1.4, duration: 4.0 },
-    { position: 7, duration: 4.0 },
-    { position: 10, duration: 4.0 },
-    { position: 12.82, duration: 4.0 },
-    { position: 22, duration: 12 },
-  ];
-
-  const updateZone = (newZone, isInstant = false) => {
-    if (isChangingZone.current) return;
-    if (newZone < 0) return; // Prevent scrolling behind the first zone
-    if (newZone > landingZones.length - 1) return; // Prevent scrolling past the last zone
-
-    const links = document.querySelectorAll(".page-link");
-    links.forEach((el) => el.classList.add("disable-link"));
-
-    isChangingZone.current = true;
-    isInstantRef.current = isInstant;
-    setZone(newZone);
-  };
-
   useEffect(() => {
     if (progress === 100) {
       // Animate to initial position on load complete
       gsap.to(sheet.sequence, {
-        position: landingZones[0].position,
+        position: 1.4,
         duration: 2.6,
         delay: 1,
         onComplete: () => setInitialLoadComplete(true),
@@ -129,79 +108,22 @@ export default function App() {
     }
   }, [progress, sheet.sequence]);
 
-  useUpdateEffect(() => {
-    const durationOf = zone - previousZone > 0 ? zone : previousZone;
-    let duration = landingZones[durationOf].duration;
-
-    if (isInstantRef.current) {
-      setTimeout(() => {
-        gsap.set(sheet.sequence, { position: landingZones[zone].position });
-      }, 500);
-
-      setTimeout(() => {
-        const links = document.querySelectorAll(".page-link");
-        links.forEach((el) => el.classList.remove("disable-link"));
-
-        isChangingZone.current = false;
-        isInstantRef.current = false;
-      }, 4250);
-    } else {
-      gsap.to(sheet.sequence, {
-        position: landingZones[zone].position,
-        duration,
-        onComplete: () => {
-          const links = document.querySelectorAll(".page-link");
-          links.forEach((el) => el.classList.remove("disable-link"));
-
-          isChangingZone.current = false;
-          isInstantRef.current = false;
-        },
-      });
-    }
-  }, [zone]);
-
-  useEffect(() => {
-    if (!initialLoadComplete) return;
-
-    const handleWheel = (e) => {
-      if (Math.abs(e.deltaY) < 10) return;
-
-      updateZone(zone + Math.sign(e.deltaY));
-    };
-
-    const handleTouchStart = (e) => {
-      lastTouchY.current = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = (e) => {
-      const deltaY = e.touches[0].clientY - lastTouchY.current;
-      lastTouchY.current = e.touches[0].clientY;
-      updateZone(zone + Math.sign(deltaY));
-    };
-
-    document.addEventListener("wheel", handleWheel);
-    document.addEventListener("touchstart", handleTouchStart);
-    document.addEventListener("touchmove", handleTouchMove);
-    return () => {
-      document.removeEventListener("wheel", handleWheel);
-      document.removeEventListener("touchstart", handleTouchStart);
-      document.removeEventListener("touchmove", handleTouchMove);
-    };
-  }, [initialLoadComplete, zone]);
-
   return (
     <>
       <Interface
-        zone={zone}
-        updateZone={updateZone}
-        isChangingZone={isChangingZone}
+        handleMenuClick={handleMenuClick}
+        activeMenu={activeMenu}
+        setActiveMenu={setActiveMenu}
+        defrotation={defrotation}
+        setDefrotation={setDefrotation}
       />
       <Lastvideo newsheet={myObject} />
-      <CanvasContainer
+       <CanvasContainer
         sheet={sheet}
         maxspeed={maxspeed}
         initialLoadComplete={initialLoadComplete}
         isManualSelectionRef={isManualSelectionRef}
+        setActiveMenu={setActiveMenu}
         defrotation={defrotation}
         setDefrotation={setDefrotation}
       />
@@ -216,7 +138,7 @@ const CanvasContainer = memo(
     maxspeed,
     initialLoadComplete,
     isManualSelectionRef,
-
+    setActiveMenu,
     defrotation,
     setDefrotation,
   }) => {
@@ -227,16 +149,26 @@ const CanvasContainer = memo(
         shadows
         gl={{ logarithmicDepthBuffer: true, preserveDrawingBuffer: true }}
       >
-        <SheetProvider sheet={sheet}>
-          <Suspense fallback={null}>
-            <Scene
-              isManualSelectionRef={isManualSelectionRef}
-              defrotation={defrotation}
-              setDefrotation={setDefrotation}
-              initialLoadComplete={initialLoadComplete}
-            />
-          </Suspense>
-        </SheetProvider>
+        <ScrollControls
+          maxSpeed={maxspeed}
+          pages={15}
+          damping={0.12
+          }
+            htmlStyle={{ display: "none" }} // Hide scrollbar
+          enabled={initialLoadComplete}
+        >
+          <SheetProvider sheet={sheet}>
+            <Suspense fallback={null}>
+              <Scene
+                isManualSelectionRef={isManualSelectionRef}
+                setActiveMenu={setActiveMenu}
+                defrotation={defrotation}
+                setDefrotation={setDefrotation}
+                initialLoadComplete={initialLoadComplete}
+              />
+            </Suspense>
+          </SheetProvider>
+        </ScrollControls>
 
         <Environment resolution={512}>
           <Lightformer
@@ -270,7 +202,7 @@ const CanvasContainer = memo(
 function Scene({
   activeMenu,
   isManualSelectionRef,
-
+  setActiveMenu,
   initialLoadComplete,
   setDefrotation,
   defrotation,
@@ -304,7 +236,8 @@ function Scene({
     scene.background = texture;
     materials["arrow-material"].color = new THREE.Color("black");
     materials["video-texture"].map = mainVideo;
-
+  
+    
     // Optimize material settings
     Object.values(materials).forEach((material) => {
       if (material.map) {
@@ -351,9 +284,7 @@ function Scene({
     // console.log(scroll.offset)
     if (initialLoadComplete) {
       const sequenceLength = 22.5;
-      // ! PREVIOUSLY SETTING ANIMATION PROGRESS HERE
-      // sheet.sequence.position = scroll.offset * sequenceLength + 1.4;
-
+      sheet.sequence.position = scroll.offset * sequenceLength + 1.4;
       // Update arrow positions based on sequence position
       if (sheet.sequence.position < 7) {
         nodes["arrow"].position.x = 0.72;
@@ -391,7 +322,7 @@ function Scene({
       }
 
       // Update milkbox logo states based on sequence position
-      // updateMilkboxLogoStates(sheet.sequence.position);
+      updateMilkboxLogoStates(sheet.sequence.position);
     }
   });
 
@@ -442,15 +373,15 @@ function Scene({
             object={nodes.insta}
             onPointerOver={handleMouseOver}
             onPointerLeave={handleMouseLeave}
-            onClick={() =>
-              window.open("https://www.instagram.com/calciumandcompany/")
-            }
+            // onClick={() =>
+            //   window.open("https://www.instagram.com/calciumandcompany/")
+            // }
           />
           <primitive
             object={nodes.work}
             onPointerOver={handleMouseOver}
             onPointerLeave={handleMouseLeave}
-            onClick={() => window.open("https://calciumco.com/careers/")}
+            // onClick={() => window.open("https://calciumco.com/careers/")}
           />
 
           <editable.group theatreKey="Cap">
@@ -502,22 +433,48 @@ function updateArrowPositions(position, nodes) {
   }
 }
 
-// function updateMilkboxLogoStates(position) {
-//   const logoElements = document.querySelectorAll(
-//     ".milkbox-points-container img"
-//   );
-//   const setLogoState = (indices) => {
-//     logoElements.forEach((el, i) => {
-//       el.src = indices.includes(i)
-//         ? "milkbox-logo-hovered.png"
-//         : "milkbox-logo.png";
-//     });
-//   };
+function updateMilkboxLogoStates(position) {
+  const logoElements = document.querySelectorAll(
+    ".milkbox-points-container img"
+  );
+  const setLogoState = (indices) => {
+    logoElements.forEach((el, i) => {
+      el.src = indices.includes(i)
+        ? "milkbox-logo-hovered.png"
+        : "milkbox-logo.png";
+    });
+  };
 
-//   if (position < 1.5) setLogoState([0]);
-//   else if (position < 5.8) setLogoState([0]);
-//   else if (position < 7.1) setLogoState([0, 1]);
-//   else if (position < 9.75) setLogoState([0, 1]);
-//   else if (position < 12.17) setLogoState([0, 1, 2]);
-//   else if (position < 22) setLogoState([0, 1, 2, 3]);
-// }
+  if (position < 1.5) setLogoState([0]);
+  else if (position < 5.8) setLogoState([0]);
+  else if (position < 7.1) setLogoState([0, 1]);
+  else if (position < 9.75) setLogoState([0, 1]);
+  else if (position < 12.17) setLogoState([0, 1, 2]);
+  else if (position < 22) setLogoState([0, 1, 2, 3]);
+}
+
+  function updateActiveMenu(position, setActiveMenu, isManualSelectionRef) {
+    if (isManualSelectionRef.current) return; // Skip updating if a menu item was clicked
+
+    switch (true) {
+      case position < 5.8:
+        setActiveMenu(1);
+        break;
+
+      case position >= 5.8 && position < 9.75:
+        setActiveMenu(2);
+        break;
+
+      case position >= 9.75 && position < 12.22:
+        setActiveMenu(3);
+        break;
+
+      case position >= 12.22:
+        setActiveMenu(4);
+        break;
+
+      default:
+        setActiveMenu(null); // Optional: Reset or handle unexpected positions
+        break;
+    }
+  }
