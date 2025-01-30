@@ -198,14 +198,7 @@ const CanvasContainer = memo(
   }
 );
 
-function Scene({
-  activeMenu,
-  isManualSelectionRef,
-  setActiveMenu,
-  initialLoadComplete,
-  setDefrotation,
-  defrotation,
-}) {
+function Scene({ initialLoadComplete, defrotation }) {
   const sheet = useCurrentSheet();
   const scroll = useScroll();
   const { nodes, materials } = useGLTF("milk-carton.glb");
@@ -223,14 +216,7 @@ function Scene({
       }),
     [sheet]
   );
-  // useEffect(() => {
-  //   if (scroll.offset > 0.09018224573780129 && !rotationReset) {
-  //     // Set rotationReset to true once the sequence starts
-  //     setRotationReset(true);
-  //   }
-  // }, [sheet.sequence.position, rotationReset]);
   useEffect(() => {
-    // Set up scene background and materials
     texture.encoding = THREE.sRGBEncoding;
     scene.background = texture;
     materials["arrow-material"].color = new THREE.Color("black");
@@ -251,7 +237,6 @@ function Scene({
       node.castShadow = true;
     });
   }, [scene]);
-  // console.log(defrotation)
   useEffect(() => {
     // Update opacity of images-canvas based on Video object values
     Video.onValuesChange((values) => {
@@ -259,27 +244,8 @@ function Scene({
         values.opacity.value;
     });
   }, [Video]);
-  // console.log(sheet.sequence.position)
 
   useFrame(() => {
-    // if (rotationReset) {
-    //   // Reset the rotation to [0, 0, 0] when scroll starts
-    //   // You can apply this to any object you need to reset
-    //   setTimeout(() => {
-
-    //   }, 6000);
-    //   setDefrotation([0, 0, 0]);
-    // }
-
-    if (sheet.sequence.position) {
-      // updateActiveMenu(
-      //   sheet.sequence.position,
-      //   setActiveMenu,
-      //   isManualSelectionRef
-      // );
-    }
-
-    // console.log(scroll.offset)
     if (initialLoadComplete) {
       const sequenceLength = 22.5;
       sheet.sequence.position = scroll.offset * sequenceLength + 1.4;
@@ -302,9 +268,6 @@ function Scene({
         setTimeout(() => {
           nodes["arrow3"].position.x = 0.75;
         }, 350);
-        // setTimeout(() => {
-        //   nodes["arrow4"].position.x = 0.75;
-        // }, 500);
         setTimeout(() => {
           nodes["arrow5"].position.x = 0.75;
         }, 650);
@@ -405,7 +368,6 @@ function Scene({
       <Plane rotation={[-Math.PI * 0.5, 0, 0]} args={[100, 100]} receiveShadow>
         <shadowMaterial attach="material" transparent opacity={0.4} />
       </Plane>
-      {/* <OrbitControls/> */}
       <PerspectiveCamera
         theatreKey="Camera"
         makeDefault
@@ -416,33 +378,6 @@ function Scene({
       />
     </>
   );
-}
-
-// Helper functions
-function updateArrowPositions(position, nodes) {
-  const arrowNames = [
-    "arrow",
-    "arrow2",
-    "arrow3",
-    // "arrow4",
-    "arrow5",
-    "arrow6",
-    "arrow7",
-    "arrow8",
-  ];
-  const basePosition = position < 7 ? 0.72 : 0.75;
-
-  if (position > 7.05) {
-    arrowNames.forEach((name, index) => {
-      setTimeout(() => {
-        nodes[name].position.x = basePosition;
-      }, index * 150);
-    });
-  } else {
-    arrowNames.forEach((name) => {
-      nodes[name].position.x = basePosition;
-    });
-  }
 }
 
 function updateMilkboxLogoStates(position) {
@@ -463,30 +398,4 @@ function updateMilkboxLogoStates(position) {
   else if (position < 9.75) setLogoState([0, 1]);
   else if (position < 12.17) setLogoState([0, 1, 2]);
   else if (position < 22) setLogoState([0, 1, 2, 3]);
-}
-
-function updateActiveMenu(position, setActiveMenu, isManualSelectionRef) {
-  if (isManualSelectionRef.current) return; // Skip updating if a menu item was clicked
-
-  switch (true) {
-    case position < 5.8:
-      setActiveMenu(1);
-      break;
-
-    case position >= 5.8 && position < 9.75:
-      setActiveMenu(2);
-      break;
-
-    case position >= 9.75 && position < 12.22:
-      setActiveMenu(3);
-      break;
-
-    case position >= 12.22:
-      setActiveMenu(4);
-      break;
-
-    default:
-      setActiveMenu(null); // Optional: Reset or handle unexpected positions
-      break;
-  }
 }

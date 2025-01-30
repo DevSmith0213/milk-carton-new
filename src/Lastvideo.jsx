@@ -1,11 +1,9 @@
 import { useRef, useState, useEffect } from "react";
-import { useProgress } from "@react-three/drei";
 
 export const Lastvideo = (props) => {
   const canvasRef = useRef();
   const [images, setImages] = useState([]);
   const [currentFrame, setCurrentFrame] = useState(0);
-  const { total } = useProgress();
 
   useEffect(() => {
     if (currentFrame > 185) {
@@ -16,9 +14,6 @@ export const Lastvideo = (props) => {
   }, [currentFrame]);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-
     const preloadImages = () => {
       const imageArray = [];
       for (let i = 0; i <= 374; i++) {
@@ -96,7 +91,11 @@ export const Lastvideo = (props) => {
 
   return (
     <div className="images-canvas-wrapper">
-      <a href="https://calcium.calciumco.com/" target="_blank" className="last-video-link"></a>
+      <a
+        href="https://calcium.calciumco.com/"
+        target="_blank"
+        className="last-video-link"
+      ></a>
       <canvas ref={canvasRef} className="images-canvas"></canvas>
     </div>
   );

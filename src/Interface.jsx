@@ -238,7 +238,6 @@ export function Interface({
           >
             HOME
             <img
-              // src="milkbox-logo.png"
               src={
                 activeMenu === 1
                   ? "milkbox-logo-hovered.png"
@@ -254,7 +253,6 @@ export function Interface({
           >
             FACTS
             <img
-              // src="milkbox-logo.png"
               src={
                 activeMenu === 2
                   ? "milkbox-logo-hovered.png"
@@ -270,7 +268,6 @@ export function Interface({
           >
             NOURISHMENT
             <img
-              // src="milkbox-logo.png"
               src={
                 activeMenu === 3
                   ? "milkbox-logo-hovered.png"
@@ -286,7 +283,6 @@ export function Interface({
           >
             THE HERD
             <img
-              // src="milkbox-logo.png"
               src={
                 activeMenu === 4
                   ? "milkbox-logo-hovered.png"
