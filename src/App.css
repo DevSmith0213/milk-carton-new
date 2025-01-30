@@ -135,6 +135,9 @@ video {
   .btm-scroll h1 {
   font-size: 13px;
 }
+  .scroll-down-img{
+  width:36px;
+  }
 }
 
 @media screen and (max-width: 550px) {
