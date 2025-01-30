@@ -133,14 +133,20 @@ video {
     margin-top: 10px;
   }
   .btm-scroll h1 {
-  font-size: 13px;
-}
-  .scroll-down-img{
-  width:36px;
+    font-size: 13px;
+  }
+  .scroll-down-img {
+    width: 32px;
   }
 }
 
 @media screen and (max-width: 550px) {
+  .btm-scroll h1 {
+    font-size: 11px;
+  }
+  .scroll-down-img {
+    width: 28px;
+  }
   .milkbox-points-container div {
     height: 39px;
     flex-direction: column-reverse;
@@ -308,4 +314,26 @@ nav a:hover {
     width: 70px;
     height: 70px;
   } */
+}
+
+.images-canvas-wrapper {
+  position: absolute;
+  inset: 0px;
+}
+
+.last-video-link {
+  position: absolute;
+  z-index: 101;
+  width: 268px;
+  aspect-ratio: 2.4;
+  left: 50%;
+  top: 66%;
+  translate: -50% -50%;
+}
+
+@media screen and (max-width: 549px) {
+  .last-video-link {
+    top: 60.5%;
+    width: 220px;
+  }
 }
