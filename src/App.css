@@ -132,6 +132,9 @@ video {
     font-size: 9px;
     margin-top: 10px;
   }
+  .btm-scroll h1 {
+  font-size: 13px;
+}
 }
 
 @media screen and (max-width: 550px) {
