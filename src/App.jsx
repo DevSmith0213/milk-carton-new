@@ -38,7 +38,7 @@ import { Lastvideo } from "./Lastvideo";
 
 // Preload 3D model
 
-useGLTF.preload("export.glb");
+useGLTF.preload("milk-carton.glb");
 
 export default function App() {
   const { progress } = useProgress();
@@ -208,7 +208,7 @@ function Scene({
 }) {
   const sheet = useCurrentSheet();
   const scroll = useScroll();
-  const { nodes, materials } = useGLTF("export.glb");
+  const { nodes, materials } = useGLTF("milk-carton.glb");
   const { scene } = useThree();
   const texture = useTexture("bg-image.png");
   const mainVideo = useVideoTexture("video_prev.mp4");
