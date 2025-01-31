@@ -117,7 +117,7 @@ export default function App() {
         defrotation={defrotation}
         setDefrotation={setDefrotation}
       />
-      <Lastvideo newsheet={myObject} />
+      <Lastvideo newsheet={myObject} sheet={sheet} />
       <CanvasContainer
         sheet={sheet}
         maxspeed={maxspeed}

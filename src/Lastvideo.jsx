@@ -1,12 +1,12 @@
 import { useRef, useState, useEffect } from "react";
 
-export const Lastvideo = (props) => {
+export const Lastvideo = ({ sheet, ...props }) => {
   const canvasRef = useRef();
   const [images, setImages] = useState([]);
   const [currentFrame, setCurrentFrame] = useState(0);
 
   useEffect(() => {
-    if (currentFrame > 185) {
+    if (currentFrame > 185 && sheet.sequence.position > 15) {
       document.querySelector(".last-video-link").style.pointerEvents = "auto";
     } else {
       document.querySelector(".last-video-link").style.pointerEvents = "none";
