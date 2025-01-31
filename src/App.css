@@ -32,12 +32,12 @@ canvas {
 
 .btm-scroll h1 {
   font-weight: 500;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .scroll-down-img {
   margin-top: 10px;
-  width: 50px;
+  width: 40px;
   object-fit: contain;
 }
 
@@ -137,7 +137,7 @@ video {
     font-size: 13px;
   }
   .scroll-down-img {
-    width: 32px;
+    width: 30px;
   }
 }
 

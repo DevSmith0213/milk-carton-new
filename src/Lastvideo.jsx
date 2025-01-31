@@ -93,7 +93,7 @@ export const Lastvideo = ({ sheet, ...props }) => {
     <>
       <div className="images-canvas-link-wrapper">
         <a
-          href="https://calcium.calciumco.com/"
+          href="https://calciumco.com/"
           target="_blank"
           className="last-video-link"
         ></a>
