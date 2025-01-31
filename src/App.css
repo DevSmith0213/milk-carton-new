@@ -316,7 +316,7 @@ nav a:hover {
   } */
 }
 
-.images-canvas-wrapper {
+.images-canvas-link-wrapper {
   position: absolute;
   inset: 0px;
 }

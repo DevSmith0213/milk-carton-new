@@ -240,7 +240,7 @@ function Scene({ initialLoadComplete, defrotation }) {
   useEffect(() => {
     // Update opacity of images-canvas based on Video object values
     Video.onValuesChange((values) => {
-      document.querySelector(".images-canvas-wrapper").style.opacity =
+      document.querySelector(".images-canvas").style.opacity =
         values.opacity.value;
     });
   }, [Video]);
